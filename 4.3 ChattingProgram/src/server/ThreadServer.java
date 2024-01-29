@@ -1,17 +1,11 @@
-/*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
- */
+
 package server;
 import java.io.*;
 import java.net.Socket;
 import java.net.SocketException;
 import java.util.ArrayList;
 import java.util.HashMap;
-/**
- *
- * @author user
- */
+
 public class ThreadServer extends Thread{
      private Socket socket;
     private ArrayList<Socket> clients;

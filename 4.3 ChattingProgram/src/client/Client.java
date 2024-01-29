@@ -1,15 +1,9 @@
-/*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
- */
+
 package client;
 import java.io.PrintWriter;
 import java.net.Socket;
 import java.util.Scanner;
-/**
- *
- * @author user
- */
+
 public class Client {
     public static void main(String[] args) {
         String name = "empty";
@@ -23,7 +17,7 @@ public class Client {
             PrintWriter cout = new PrintWriter(socket.getOutputStream(), true);
 
             ThreadClient threadClient = new ThreadClient(socket);
-            new Thread(threadClient).start(); // start thread to receive message
+            new Thread(threadClient).start(); 
 
             cout.println(reply + ": has joined chat-room.");
             do {

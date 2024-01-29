@@ -1,103 +1,108 @@
-/*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
- */
+
 package pkg5.pkg2.javafxuicontrols;
 import javafx.application.Application;
+import javafx.event.ActionEvent;
+import javafx.event.EventHandler;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
-import javafx.scene.layout.*;
+import javafx.scene.layout.HBox;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
-
 import java.io.File;
-/**
- *
- * @author user
- */
+
 public class JavaFxUiControls extends Application{
 
-    /**
-     * @param args the command line arguments
-     */
-    public static void main(String[] args) {
-        launch(args);
-    }
+    @Override
+    public void start(final Stage primaryStage) {
+        primaryStage.setTitle("JavaFX UI Controls Example");
 
-   @Override
-    public void start(Stage primaryStage) {
-        primaryStage.setTitle("JavaFX UI Controls Alternative");
-
-        // Label
         Label label = new Label("Enter your name:");
 
-        // TextField
-        TextField textField = new TextField();
-        textField.setPromptText("Type here");
+        final TextField textField = new TextField();
 
-        // Button
-        Button button = new Button("Submit");
-        button.setOnAction(e -> {
-            String enteredText = textField.getText();
-            Alert alert = new Alert(Alert.AlertType.INFORMATION);
-            alert.setContentText("Hello, " + enteredText + "!");
-            alert.showAndWait();
+        Button button = new Button("Button");
+        button.setOnAction(new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(ActionEvent event) {
+                String enteredText = textField.getText();
+                Alert alert = new Alert(Alert.AlertType.INFORMATION);
+                alert.setContentText("Hello, " + enteredText + "!");
+                alert.showAndWait();
+            }
         });
 
         // RadioButton
         RadioButton radioButton = new RadioButton("Option 1");
         RadioButton radioButton2 = new RadioButton("Option 2");
-        ToggleGroup radioGroup = new ToggleGroup();
-        radioButton.setToggleGroup(radioGroup);
-        radioButton2.setToggleGroup(radioGroup);
+        ToggleGroup toggleGroup = new ToggleGroup();
+        radioButton.setToggleGroup(toggleGroup);
+        radioButton2.setToggleGroup(toggleGroup);
 
         // CheckBox
-        CheckBox checkBox = new CheckBox("Check me");
+        CheckBox checkBox = new CheckBox("Agree to terms");
 
         // Hyperlink
-        Hyperlink hyperlink = new Hyperlink("Visit OpenAI");
-        hyperlink.setOnAction(e -> getHostServices().showDocument("https://www.openai.com"));
+        Hyperlink hyperlink = new Hyperlink("Visit our website");
+        hyperlink.setOnAction(new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(ActionEvent event) {
+                getHostServices().showDocument("https://example.com");
+            }
+        });
 
         // Menu
-        MenuBar menuBar = new MenuBar();
         Menu menu = new Menu("File");
-        MenuItem menuItem = new MenuItem("Open");
-        menuItem.setOnAction(e -> openFileChooser());
-        menu.getItems().add(menuItem);
+        MenuItem openMenuItem = new MenuItem("Open");
+//        openMenuItem.setOnAction(e - > openFile(primaryStage));
+        openMenuItem.setOnAction(new EventHandler<ActionEvent>(){
+            @Override
+            public void handle(ActionEvent event){
+                openFile(primaryStage);
+            }
+        });
+        MenuItem exitMenuItem = new MenuItem("Exit");
+        exitMenuItem.setOnAction(new EventHandler<ActionEvent>(){
+            @Override
+            public void handle(ActionEvent event){
+                System.exit(0);
+            }
+        });
+        menu.getItems().addAll(openMenuItem, exitMenuItem);
+
+        // MenuBar
+        MenuBar menuBar = new MenuBar();
         menuBar.getMenus().add(menu);
 
         // Tooltip
-        Tooltip tooltip = new Tooltip("This is a tooltip");
+        Tooltip tooltip = new Tooltip("Click to submit");
 
-        // VBox
-        VBox vBox = new VBox(10);
-        vBox.setPadding(new Insets(10, 10, 10, 10));
-        vBox.getChildren().addAll(
-                label,
-                textField,
-                button,
-                radioButton,
-                radioButton2,
-                checkBox,
-                hyperlink,
-                menuBar,
-                new Label("Hover over me:"),
-                new Button("Button with Tooltip"),
-                tooltip
-        );
+        // Layout
+        HBox hbox = new HBox(10);
+        hbox.getChildren().addAll(label, textField, button, 
+                radioButton, radioButton2, checkBox, hyperlink);
+        hbox.setSpacing(10);
 
-        // Set up the scene
-        Scene scene = new Scene(vBox, 400, 300);
+        Scene scene = new Scene(new HBox(10, label, textField, button, 
+                radioButton, radioButton2, checkBox, hyperlink), 1100, 200);
+
+        ((HBox) scene.getRoot()).getChildren().addAll(menuBar);
+
         primaryStage.setScene(scene);
         primaryStage.show();
     }
 
-    private void openFileChooser() {
+    private void openFile(Stage primaryStage) {
         FileChooser fileChooser = new FileChooser();
         fileChooser.setTitle("Open File");
-        File selectedFile = fileChooser.showOpenDialog(null);
-        if (selectedFile != null) {
-            System.out.println("Selected file: " + selectedFile.getAbsolutePath());
+        File file = fileChooser.showOpenDialog(primaryStage);
+        if (file != null) {
+            Alert alert = new Alert(Alert.AlertType.INFORMATION);
+            alert.setContentText("Selected file: " + file.getAbsolutePath());
+            alert.showAndWait();
         }
+    }
+
+    public static void main(String[] args) {
+        launch(args);
     }
 }
